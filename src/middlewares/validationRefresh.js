@@ -4,7 +4,7 @@ const { SECRET_KEY_REFRESH } = require("../config");
 
 require("dotenv").config();
 
-const secret = process.env.SECRET_KEY_REFRESH;
+const secret = SECRET_KEY_REFRESH;
 
 const validationRefresh = async (req, res, next) => {
   try {
@@ -13,14 +13,35 @@ const validationRefresh = async (req, res, next) => {
       throw new Error({ status: 400, message: " no important cookie " });
     }
     const { id, exp } = jwt.verify(rtoken, secret);
+    // console.log(id, exp);
+    console.log(exp * 1000);
+    console.log(Date.now());
     const user = await User.findById(id);
+    console.log(user.token);
+    console.log(user.tokenR);
+    console.log(!user.tokenR);
+    console.log(rtoken);
+    console.log(SECRET_KEY_REFRESH);
+    console.log(rtoken === user.tokenR);
+    console.log(Date.now() > exp * 1000);
 
-    if (!user || Date.now() > exp * 1000) {
+    if (!user || !user.tokenR) {
+      console.log(" ffffffffffffiiiiiiiiiiiixxxxxxxxxx ");
       throw new Error({ status: 400, message: "Auth error, go login/signup " });
+    }
+
+    if (Date.now() > exp * 1000) {
+      console.log(" bbb ");
+      throw new Error({
+        status: 400,
+        message: "Token expired, go login/signup ",
+      });
     }
 
     if (rtoken === user.tokenR) {
       req.user = user;
+      console.log(" - - - -- - - - - - -- - - - - - - - - ");
+
       next();
     } else {
       throw new Error({ status: 400, message: "Auth error, go login/signup " });
