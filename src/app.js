@@ -22,7 +22,10 @@ app.use(
     // credentials: true,
     // origin: "http://localhost:3000",
 
-    origin: "https://animated-kulfi-5816e3.netlify.app",
+    origin: [
+      "https://animated-kulfi-5816e3.netlify.app",
+      "http://localhost:3000",
+    ],
     credentials: true,
   })
 );

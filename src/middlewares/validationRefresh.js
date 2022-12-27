@@ -1,5 +1,6 @@
 const User = require("../models/schemas/authModel");
 const jwt = require("jsonwebtoken");
+const { SECRET_KEY_REFRESH } = require("../config");
 
 require("dotenv").config();
 

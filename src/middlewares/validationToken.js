@@ -1,5 +1,6 @@
 const User = require("../models/schemas/authModel");
 const jwt = require("jsonwebtoken");
+const { SECRET_KEY } = require("../config");
 
 const validationToken = async (req, res, next) => {
   const authHeader = req.headers.authorization || " ";
@@ -7,7 +8,7 @@ const validationToken = async (req, res, next) => {
 
   if (bearer === "Bearer" && token) {
     try {
-      const { id, exp } = jwt.verify(token, process.env.SECRET_KEY);
+      const { id, exp } = jwt.verify(token, SECRET_KEY);
       const user = await User.findById(id);
       if (!user || !user.token) {
         throw new Error();

@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { SECRET_KEY, SECRET_KEY_REFRESH } = require("../config");
 
 const User = require("../models/schemas/authModel");
 const bcrypt = require("bcrypt");
@@ -7,10 +8,10 @@ const jwt = require("jsonwebtoken");
 const { customError } = require("../helpers/errors");
 
 const generateTokens = (payload) => {
-  const tokenR = jwt.sign(payload, process.env.SECRET_KEY_REFRESH, {
+  const tokenR = jwt.sign(payload, SECRET_KEY_REFRESH, {
     expiresIn: "30d",
   });
-  const token = jwt.sign(payload, process.env.SECRET_KEY, {
+  const token = jwt.sign(payload, SECRET_KEY, {
     expiresIn: "30s",
   });
   return { token, tokenR };
@@ -91,9 +92,11 @@ const login = async (req, res, next) => {
   res.status(200).json({
     token,
     user: {
-      email: user.email, name: user.name, data: user.data,
+      email: user.email,
+      name: user.name,
+      data: user.data,
       callorie: user.callorie,
-      notRecommendedProduct: user.notRecommendedProduct
+      notRecommendedProduct: user.notRecommendedProduct,
     },
   });
 };
