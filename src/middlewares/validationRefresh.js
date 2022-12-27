@@ -9,10 +9,13 @@ const secret = process.env.SECRET_KEY_REFRESH;
 const validationRefresh = async (req, res, next) => {
   try {
     const { rtoken } = req.cookies;
+    if (!rtoken) {
+      throw new Error({ status: 400, message: " no important cookie " });
+    }
     const { id, exp } = jwt.verify(rtoken, secret);
     const user = await User.findById(id);
 
-    if (!rtoken || !user || Date.now() > exp * 1000) {
+    if (!user || Date.now() > exp * 1000) {
       throw new Error({ status: 400, message: "Auth error, go login/signup " });
     }
 
