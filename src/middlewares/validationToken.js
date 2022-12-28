@@ -3,36 +3,23 @@ const jwt = require("jsonwebtoken");
 const { SECRET_KEY } = require("../config");
 
 const validationToken = async (req, res, next) => {
-  const authHeader = req.headers.authorization || " ";
+  const authHeader = req.headers.authorization || "";
   const [bearer, token] = authHeader.split(" ");
 
   if (bearer === "Bearer" && token) {
     try {
-      const { id, exp } = jwt.verify(token, SECRET_KEY);
+      const { id } = jwt.verify(token, SECRET_KEY); // , exp
       const user = await User.findById(id);
       if (!user || !user.token) {
         throw new Error();
-      }
-
-      if (token !== user.token) {
-        throw new Error({
-          status: 401,
-          message: "bad token",
-        });
-      }
-
-      if (Date.now() > exp * 1000) {
-        throw new Error({
-          status: 401,
-          message: "expired token",
-        });
       }
 
       req.user = user;
 
       next();
     } catch (error) {
-      if (error.status === 401) {
+      if (error.message === "invalid signature") {
+        error.status = 401;
         next(error);
       }
 

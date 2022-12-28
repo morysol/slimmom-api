@@ -24,7 +24,7 @@ router.post(
   asyncWrapper(signup)
 );
 router.post("/login", validationBody(schemaAuth), asyncWrapper(login));
-router.post("/logout", validationToken, asyncWrapper(logout));
+router.post("/logout", validationRefresh, asyncWrapper(logout));
 router.get("/current", validationToken, asyncWrapper(currentUser));
 // refresh token  asyncWrapper(currentUser)
 router.post("/refreshToken", validationRefresh, asyncWrapper(refreshToken));
