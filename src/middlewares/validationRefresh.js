@@ -20,21 +20,21 @@ const validationRefresh = async (req, res, next) => {
     if (!user || !user.tokenR) {
       console.log(" Bad user ");
       throw customError({
-        status: 401,
+        status: 400,
         message: "Bad user, go login/signup ",
       });
     }
 
     if (rtoken !== user.tokenR) {
       throw customError({
-        status: 401,
+        status: 400,
         message: "Bad token, go login/signup ",
       });
     }
 
     if (Date.now() > exp * 1000) {
       throw customError({
-        status: 401,
+        status: 400,
         message: "Token expired, go login/signup ",
       });
     }
