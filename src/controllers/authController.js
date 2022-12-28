@@ -51,6 +51,8 @@ const signup = async (req, res, next) => {
 
     res.cookie("rtoken", tokenR, {
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
     });
 
     return res.status(201).json({
@@ -88,6 +90,8 @@ const login = async (req, res, next) => {
   await User.findByIdAndUpdate(user.id, { token, tokenR });
   res.cookie("rtoken", tokenR, {
     httpOnly: true,
+    sameSite: "none",
+    secure: true,
   });
   res.status(200).json({
     token,
@@ -142,6 +146,8 @@ const refreshToken = async (req, res, next) => {
 
     res.cookie("rtoken", tokenR, {
       httpOnly: true,
+      sameSite: "none",
+      secure: true,
     });
 
     return res.status(201).json({
